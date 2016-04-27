@@ -251,9 +251,9 @@
     <script>
     $(document).ready(function() {
         $( "button#free-job" ).click(function () {
-            $( "button#free-job" ).html('<strong style="color: white">Loading..</strong>');
-            $( "button#free-job" ).prop('disabled', true);
             if (confirm('Are you sure?')) {
+                $( "button#free-job" ).html('<strong style="color: white">Loading..</strong>');
+                $( "button#free-job" ).prop('disabled', true);
                 var job_id = $( "input#free-job-id" ).val();
                 $.ajax({
                     contentType: "application/json; charset=utf-8",
