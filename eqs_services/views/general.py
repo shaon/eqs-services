@@ -46,7 +46,6 @@ def machines():
     machine_list = []
 
     state = request.args.get('state')
-    print state
     if not state:
         state = "all"
 
