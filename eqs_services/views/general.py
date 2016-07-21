@@ -1,3 +1,4 @@
+import json
 import socket
 from flask import Blueprint, render_template, request
 from resource_manager.client import ResourceManagerClient
@@ -58,3 +59,46 @@ def machines():
         elif state == machine['state']:
             machine_list.append(machine)
     return render_template("general/machines.html", machines=machine_list)
+
+
+def get_current_jobs():
+    client = ResourceManagerClient(endpoint=RM_ENDPOINT,
+                                     resource_type='machines')
+    jobs = []
+    machines = client.get_all_resources()
+    for machine in machines:
+        if machine['job_id'] and machine['job_id'] not in jobs:
+            jobs.append(machine['job_id'])
+    return jobs
+
+
+@machine_views.route('/addresses')
+def addresses():
+
+    state = request.args.get('state')
+    if not state:
+        state = "all"
+
+    client = ResourceManagerClient(endpoint=RM_ENDPOINT,
+                                   resource_type='public-addresses')
+    all_ips = client.get_all_resources()
+    available_ips = client.find_resources(field="owner", value="")
+
+    jobs = get_current_jobs()
+    zombie_ips = []
+
+    for ip in all_ips:
+        if ip['owner'] and ip['owner'] not in jobs:
+            ip.update({'temp_state': 'zombie'})
+            zombie_ips.append(ip)
+
+    if state == "zombie":
+        ips = zombie_ips
+    else:
+        ips = all_ips
+
+    return render_template("general/ipaddresses.html",
+                           total_pub_ips=len(all_ips),
+                           available_ips=len(available_ips),
+                           zombie_ips=len(zombie_ips),
+                           ips=ips)
