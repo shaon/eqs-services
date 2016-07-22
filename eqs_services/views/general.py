@@ -32,7 +32,7 @@ def index():
             error_state.append(machine)
     total_machines = len(machines)
 
-    return render_template('general/index.html',
+    return render_template('index.html',
                            machines=machines,
                            total_machines=total_machines,
                            available_machines=len(available_machines),
