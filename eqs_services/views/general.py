@@ -76,11 +76,18 @@ def get_current_jobs():
 def addresses():
 
     state = request.args.get('state')
+    ip_type = request.args.get('type')
+
+    if not ip_type:
+        ip_type = "public-addresses"
+    if ip_type not in ['public-addresses', 'private-addresses']:
+        ip_type = "public-addresses"
+
     if not state:
         state = "all"
 
     client = ResourceManagerClient(endpoint=RM_ENDPOINT,
-                                   resource_type='public-addresses')
+                                   resource_type=ip_type)
     all_ips = client.get_all_resources()
     available_ips = client.find_resources(field="owner", value="")
 
@@ -101,4 +108,4 @@ def addresses():
                            total_pub_ips=len(all_ips),
                            available_ips=len(available_ips),
                            zombie_ips=len(zombie_ips),
-                           ips=ips)
+                           ips=ips, ip_type=ip_type)

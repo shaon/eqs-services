@@ -120,7 +120,9 @@
                                         <tr>
                                             <th>Address</th>
                                             <th>Title</th>
+                                            {% if ip_type != "private-addresses" %}
                                             <th>IP Pool</th>
+                                            {% endif %}
                                             <th>Owner</th>
                                             <th>Updated</th>
                                         </tr>
@@ -130,7 +132,9 @@
                                         <tr class="odd gradeX">
                                             <td>{{ ip.address }}</td>
                                             <td class="center">{{ ip._links.self.title }}</td>
+                                            {% if ip.tags %}
                                             <td class="center">{{ ip.tags.pool }}</td>
+                                            {% endif %}
                                             <td class="center">{{ ip.owner }}</td>
                                             <td class="center">{{ ip._updated }}</td>
                                         </tr>
