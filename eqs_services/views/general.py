@@ -104,8 +104,11 @@ def addresses():
     else:
         ips = all_ips
 
+    zombie_query_string = "type=" + ip_type + "&state=zombie"
+
     return render_template("general/ipaddresses.html",
                            total_pub_ips=len(all_ips),
                            available_ips=len(available_ips),
                            zombie_ips=len(zombie_ips),
+                           zombie_query_string=zombie_query_string,
                            ips=ips, ip_type=ip_type)
