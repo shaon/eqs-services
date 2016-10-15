@@ -19,8 +19,11 @@ def index():
     error_state = []
 
     for machine in machines:
-        addr = socket.getaddrinfo(machine['hostname'], 22, socket.AF_INET, socket.IPPROTO_IP, socket.IPPROTO_TCP)[0]
-        machine.update({'ip': str(addr[4][0])})
+        try:
+            addr = socket.getaddrinfo(machine['hostname'], 22, socket.AF_INET, socket.IPPROTO_IP, socket.IPPROTO_TCP)[0]
+            machine.update({'ip': str(addr[4][0])})
+        except:
+            machine.update({'ip': "IP NOT FOUND"})
 
         if machine['state'] == "in_use":
             used_machines.append(machine)
